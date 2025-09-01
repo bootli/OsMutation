@@ -56,11 +56,11 @@ function install(){
 }
 
 function read_lxc_template(){
-    last_lxc_version=$(curl -Ls "https://api.github.com/repos/LloydAsp/OsMutation/releases/latest" | grep "LXC" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+    last_lxc_version=$(curl -Ls "https://gitee.com/api/v5/repos/zydn/OsMutation/releases/latest" | grep "LXC" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
     if [[ -n $last_lxc_version ]]; then
-        image_list=$(curl -Ls "https://api.github.com/repos/LloydAsp/OsMutation/releases/latest" | grep "LXC" | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/')
+        image_list=$(curl -Ls "https://gitee.com/api/v5/repos/zydn/OsMutation/releases/latest" | grep "LXC" | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/')
 
-        os_list=$(curl -Ls "https://api.github.com/repos/LloydAsp/OsMutation/releases/latest" | grep "LXC" | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/' | sed "s/https\:\/\/github.com\/LloydAsp\/OsMutation\/releases\/download\/${last_lxc_version}\///g" | sed "s/\.tar\.gz//g")
+        os_list=$(curl -Ls "https://gitee.com/api/v5/repos/zydn/OsMutation/releases/latest" | grep "LXC" | grep '"browser_download_url":' | sed -E 's/.*"([^"]+)".*/\1/' | sed "s/https\:\/\/gitee.com\/zydn\/OsMutation\/releases\/download\/${last_lxc_version}\///g" | sed "s/\.tar\.gz//g")
         echo "$os_list" | nl
 
         while [ -z "${os_index##*[!0-9]*}" ]; do
@@ -91,7 +91,7 @@ function read_lxc_template(){
 
 function read_openvz_template(){
     releasetag="v0.0.1"
-    os_list=$(wget -qO- "https://github.com/LloydAsp/OsMutation/releases/expanded_assets/v0.0.1" | \
+    os_list=$(wget -qO- "https://gitee.com/zydn/OsMutation/releases/expanded_assets/v0.0.1" | \
         sed -nE '/tar.gz/s/.*>([^<>]+)\.tar\.gz.*/\1/p' | \
         grep -E "(debian)|(centos)|(alpine)" )
     echo "$os_list" | nl
@@ -103,7 +103,7 @@ function read_openvz_template(){
     done
 
     os_selected=$( echo "$os_list" | head -n $os_index | tail -n 1)
-    download_link="https://github.com/LloydAsp/OsMutation/releases/download/${releasetag}/${os_selected}.tar.gz"
+    download_link="https://gitee.com/zydn/OsMutation/releases/download/${releasetag}/${os_selected}.tar.gz"
 }
 
 function download_rootfs(){
@@ -236,7 +236,7 @@ function make_temp_os(){
     # prevent no access on ipv6 only vps
     ping -c 3 api.github.com || echo "nameserver 2a00:1098:2c::1"  >  /etc/resolv.conf 
     
-    temp_os_url="https://github.com/LloydAsp/OsMutation/releases/download/utils/alpine-3.18-chroot.tar.gz"
+    temp_os_url="https://gitee.com/zydn/OsMutation/releases/download/utils/alpine-3.18-chroot.tar.gz"
     mkdir /x
     if [ -n "$(command -v wget)" ] ; then
         wget -qO- $temp_os_url | tar -C /x -xz
